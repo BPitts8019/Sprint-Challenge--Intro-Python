@@ -33,8 +33,9 @@ def cityreader(cities=[]):
     with open("./src/cityreader/cities.csv", newline="") as csvFile:
         reader = csv.DictReader(csvFile)
         for city in reader:
-            cities.append(City(city["city"], float(
-                city["lat"]), float(city["lng"])))
+            cities.append(
+                City(city["city"], float(city["lat"]), float(city["lng"]))
+            )
 
     return cities
 
@@ -74,15 +75,36 @@ for c in cities:
 # Tucson: (32.1558,-110.8777)
 # Salt Lake City: (40.7774,-111.9301)
 
-# TODO Get latitude and longitude values from the user
-
 
 def cityreader_stretch(lat1, lon1, lat2, lon2, cities=[]):
   # within will hold the cities that fall within the specified region
     within = []
 
-    # TODO Ensure that the lat and lon valuse are all floats
-    # Go through each city and check to see if it falls within
-    # the specified coordinates.
+    # normalize input
+    if lat1 > lat2:
+        lat1, lat2 = lat2, lat1
+
+    if lon1 > lon2:
+        lon1, lon2 = lon2, lon1
+
+    for city in cities:
+        if (city.lat >= lat1
+                and city.lat <= lat2
+                and city.lon >= lon1
+                and city.lon <= lon2):
+            within.append(city)
 
     return within
+
+
+def get_coords(input: str) -> tuple:
+    values = [float(val) for val in input.split(",")]
+    return (values[0], values[1])
+
+### User Input process ###
+# commented out so the tester would run without waiting on input
+# point1 = get_coords(input("Enter the first lat, lon pair: "))
+# point2 = get_coords(input("Enter the second lat, lon pair: "))
+# print(f"[{point1}, {point2}]")
+
+# print(cityreader_stretch(point1[0], point1[1], point2[0], point2[1], cities))
